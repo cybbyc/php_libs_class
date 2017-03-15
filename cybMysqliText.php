@@ -45,4 +45,22 @@ $mysql = CybMysqli::getInstance();
 //echo $n;
 
 //查看连接数据库使用的字符集
-$mysql->return_encoding();
+//$mysql->return_encoding();
+
+//查看数据库系统中的数据库
+//$db = $mysql->showDbs();
+//$mysql->pr($db);
+
+//查看当前数据库中的表
+//$db = $mysql->showTabs();
+//$mysql->pr($db);
+
+//返回mysql服务器信息
+//$mes = $mysql->showMysqlServerMessage();
+//$mysql->pr($mes);
+
+//返回客户端信息
+$mes = $mysql->showClientMessage();
+$mysql->pr($mes);
+
+

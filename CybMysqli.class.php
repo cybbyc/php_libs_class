@@ -1,5 +1,15 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: cyb
+ * Date: 2017/3/15
+ * Time: 14:20
+ * version:1.0
+ * 描述：mysqli过程化风格
+ */
+
 header('content-type:text/html;charset=utf-8');
+
 class CybMysqli{
 
 	// 属性(私有)
@@ -20,20 +30,18 @@ class CybMysqli{
         $this->pwd = isset($config['pwd']) ? $config['pwd'] : '';
         $this->dbname = isset($config['dbname']) ? $config['dbname'] : 'test';
         $this->charset=isset($config['charset']) ? $config['charset'] : 'utf8';
-
 //        链接数据库
         $this->connectDb();
-
 //        选择数据库
         $this->selectDb();
-
 //        设置字符编码
         $this->charsetDb();
-
     }
 
-
-
+//  析构函数
+    public function __destruct(){
+        return $this->closeDb();
+    }
 
 //    链接数据库
     private function connectDb(){
@@ -102,7 +110,6 @@ class CybMysqli{
 //      返回一条数据
         return $funcName($result);
     }
-
 
     /*
       * 查询多条数据
@@ -205,7 +212,6 @@ class CybMysqli{
             $condition = $where;
         }
         $sql = 'delete from '.$table.' where '.$condition;
-
         $this->query($sql);
 //        返回当前删除操作影响的行数
         return mysqli_affected_rows($this->link);
@@ -232,15 +238,11 @@ class CybMysqli{
         }else{
             $condition = $where;
         }
-
         $sql = 'delete from '.$table.' where '.$condition;
-
         $this->query($sql);
 //        返回当前删除操作影响的行数
         return mysqli_affected_rows($this->link);
     }
-
-
 
 /*
  *
@@ -268,12 +270,57 @@ class CybMysqli{
         echo mysqli_character_set_name($this->link);
     }
 
-
-    //    析构函数
-    public function __destruct(){
-        mysqli_close($this->link);
+//    关闭数据库连接，
+    public function closeDb(){
+//        判断数据库是否处于连接状态
+        if(is_resource($this->link)){
+            return mysqli_close($this->link);
+        }else{
+            return true;
+        }
     }
 
 
+/*
+ * 查看数据库相关信息的函数
+ *
+ * */
+
+//    查看当前数据库系统中的所有数据库
+    public function showDbs(){
+        $sql = "show databases";
+        $list = $this->getAll($sql);
+        return $list;
+    }
+
+//    查看当前数据库的表
+    public function showTabs(){
+        $sql = "show tables";
+        $list = $this->getAll($sql);
+        return $list;
+    }
+
+//    查看MySQL服务器信息(主机名、连接类型、协议版本、服务器版本)
+    public function showMysqlServerMessage(){
+        $message = array();
+//        主机名、连接类型
+        $message["host"] = mysqli_get_host_info($this->link);
+//        协议版本
+        $message["proro"] = mysqli_get_proto_info($this->link);
+//        MySQL服务器版本
+        $message["version"] = mysqli_get_server_info($this->link);
+        return $message;
+    }
+
+//    查看客户端信息
+    public function showClientMessage(){
+        $message = array();
+//        客户端mysql版本号，整型
+        $message["version_i"] = mysqli_get_client_version($this->link);
+        $message["version_s"] = mysqli_get_client_info($this->link);
+//        返回每个客户端进程的统计信息
+//        $message["stats"] = mysqli_get_client_stats();
+        return $message;
+    }
 
 }
