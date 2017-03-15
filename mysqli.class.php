@@ -1,23 +1,23 @@
 <?php
 header('content-type:text/html;charset=utf-8');
 /*
-ÕÆÎÕÂú×ãµ¥ÀıÄ£Ê½µÄ±ØÒªÌõ¼ş
-(1)Ë½ÓĞµÄ¹¹Ôì·½·¨-ÎªÁË·ÀÖ¹ÔÚÀàÍâÊ¹ÓÃnew¹Ø¼ü×ÖÊµÀı»¯¶ÔÏó
-(2)Ë½ÓĞµÄ³ÉÔ±ÊôĞÔ-ÎªÁË·ÀÖ¹ÔÚÀàÍâÒıÈëÕâ¸ö´æ·Å¶ÔÏóµÄÊôĞÔ
-(3)Ë½ÓĞµÄ¿ËÂ¡·½·¨-ÎªÁË·ÀÖ¹ÔÚÀàÍâÍ¨¹ıclone³ÉÉúÁíÒ»¸ö¶ÔÏó
-(4)¹«ÓĞµÄ¾²Ì¬·½·¨-ÎªÁËÈÃÓÃ»§½øĞĞÊµÀı»¯¶ÔÏóµÄ²Ù×÷
+æŒæ¡æ»¡è¶³å•ä¾‹æ¨¡å¼çš„å¿…è¦æ¡ä»¶
+(1)ç§æœ‰çš„æ„é€ æ–¹æ³•-ä¸ºäº†é˜²æ­¢åœ¨ç±»å¤–ä½¿ç”¨newå…³é”®å­—å®ä¾‹åŒ–å¯¹è±¡
+(2)ç§æœ‰çš„æˆå‘˜å±æ€§-ä¸ºäº†é˜²æ­¢åœ¨ç±»å¤–å¼•å…¥è¿™ä¸ªå­˜æ”¾å¯¹è±¡çš„å±æ€§
+(3)ç§æœ‰çš„å…‹éš†æ–¹æ³•-ä¸ºäº†é˜²æ­¢åœ¨ç±»å¤–é€šè¿‡cloneæˆç”Ÿå¦ä¸€ä¸ªå¯¹è±¡
+(4)å…¬æœ‰çš„é™æ€æ–¹æ³•-ä¸ºäº†è®©ç”¨æˆ·è¿›è¡Œå®ä¾‹åŒ–å¯¹è±¡çš„æ“ä½œ
 */
 class ConnectMysqli{
-  //Ë½ÓĞµÄÊôĞÔ
-  private static $dbcon=false;
+  //ç§æœ‰çš„å±æ€§
+  private static $dbcon=false;	//è¿”å›åˆ°å¤–éƒ¨çš„é“¾æ¥æ ‡å¿—
   private $host;
   private $port;
   private $user;
   private $pass;
   private $db;
   private $charset;
-  private $link;	//Êı¾İ¿âÁ¬½Ó±êÖ¾
-  //Ë½ÓĞµÄ¹¹Ôì·½·¨
+  private $link;	//æ•°æ®åº“è¿æ¥æ ‡å¿—
+  //ç§æœ‰çš„æ„é€ æ–¹æ³•
   private function __construct($config=array()){
     $this->host = $config['host'] ? $config['host'] : 'localhost';
     $this->port = $config['port'] ? $config['port'] : '3306';
@@ -25,43 +25,43 @@ class ConnectMysqli{
     $this->pass = $config['pass'] ? $config['pass'] : '';
     $this->db = $config['db'] ? $config['db'] : 'test';
     $this->charset=isset($arr['charset']) ? $arr['charset'] : 'utf8';
-    //Á¬½ÓÊı¾İ¿â
+    //è¿æ¥æ•°æ®åº“
     $this->db_connect();
-    //Ñ¡ÔñÊı¾İ¿â
+    //é€‰æ‹©æ•°æ®åº“
     $this->db_usedb();
-    //ÉèÖÃ×Ö·û¼¯
+    //è®¾ç½®å­—ç¬¦é›†
     $this->db_charset();
    }
-   //Á¬½ÓÊı¾İ¿â
+   //è¿æ¥æ•°æ®åº“
    private function db_connect(){
     $this->link=mysqli_connect($this->host.':'.$this->port,$this->user,$this->pass);
-	// ÈôÁ¬½ÓÊ§°Ü£¬·µ»ØÌáÊ¾
+	// è‹¥è¿æ¥å¤±è´¥ï¼Œè¿”å›æç¤º
     if(!$this->link){
-      echo "Êı¾İ¿âÁ¬½ÓÊ§°Ü<br>";
-      echo "´íÎó±àÂë".mysqli_errno($this->link)."<br>";
-      echo "´íÎóĞÅÏ¢".mysqli_error($this->link)."<br>";
+      echo "æ•°æ®åº“è¿æ¥å¤±è´¥<br>";
+      echo "é”™è¯¯ç¼–ç ".mysqli_errno($this->link)."<br>";
+      echo "é”™è¯¯ä¿¡æ¯".mysqli_error($this->link)."<br>";
       exit;
     }
    }
    
-   //ÉèÖÃ×Ö·û¼¯
+   //è®¾ç½®å­—ç¬¦é›†
     private function db_charset(){
      mysqli_query($this->link,"set names {$this->charset}");
     }
 	
-   //Ñ¡ÔñÊı¾İ¿â
+   //é€‰æ‹©æ•°æ®åº“
    private function db_usedb(){
 	// mysqli_query($this->link,"use {$this->db}");
 	 mysqli_select_db($this->link,$this->db);
    }
    
    
-   //Ë½ÓĞµÄ¿ËÂ¡
+   //ç§æœ‰çš„å…‹éš†
    private function __clone(){
      die('clone is not allowed');
    }
    
-   //¹«ÓÃµÄ¾²Ì¬·½·¨
+   //å…¬ç”¨çš„é™æ€æ–¹æ³•
    public static function getIntance(){
      if(self::$dbcon==false){
       self::$dbcon=new self;
@@ -74,18 +74,18 @@ class ConnectMysqli{
    
 
    
-   //Ö´ĞĞsqlÓï¾äµÄ·½·¨
+   //æ‰§è¡Œsqlè¯­å¥çš„æ–¹æ³•
     public function query($sql){
      $res=mysqli_query($this->link,$sql);
      if(!$res){
-      echo "sqlÓï¾äÖ´ĞĞÊ§°Ü<br>";
-      echo "´íÎó±àÂëÊÇ".mysqli_errno($this->link)."<br>";
-      echo "´íÎóĞÅÏ¢ÊÇ".mysqli_error($this->link)."<br>";
+      echo "sqlè¯­å¥æ‰§è¡Œå¤±è´¥<br>";
+      echo "é”™è¯¯ç¼–ç æ˜¯".mysqli_errno($this->link)."<br>";
+      echo "é”™è¯¯ä¿¡æ¯æ˜¯".mysqli_error($this->link)."<br>";
      }
      return $res;
    }
    
-   //´òÓ¡Êı¾İ
+   //æ‰“å°æ•°æ®
     public function p($arr){
       echo "<pre>";
       print_r($arr);
@@ -98,21 +98,22 @@ class ConnectMysqli{
       echo "</pre>";
     }
 	
-    //»ñµÃ×îºóÒ»Ìõ¼ÇÂ¼id
+    //è·å¾—æœ€åä¸€æ¡è®°å½•id
     public function getInsertid(){
      return mysqli_insert_id($this->link);
     }
 	
    /**
-    * ²éÑ¯Ä³¸ö×Ö¶Î
+    * æŸ¥è¯¢æŸä¸ªå­—æ®µ
     * @param
     * @return string or int
     */
-    public function getOne($sql){
-     $query=$this->query($sql);
-      return mysqli_free_result($query);
-    }
-    //»ñÈ¡Ò»ĞĞ¼ÇÂ¼,return array Ò»Î¬Êı×é
+    // public function getOne($sql){
+     // $query=$this->query($sql);
+      // return mysqli_free_result($query);
+    // }
+	
+    //è·å–ä¸€è¡Œè®°å½•,return array ä¸€ç»´æ•°ç»„
     public function getRow($sql,$type="assoc"){
      $query=$this->query($sql);
      if(!in_array($type,array("assoc",'array',"row"))){
@@ -122,17 +123,17 @@ class ConnectMysqli{
      return $funcname($query);
     }
 	
-    //»ñÈ¡Ò»Ìõ¼ÇÂ¼,Ç°ÖÃÌõ¼şÍ¨¹ı×ÊÔ´»ñÈ¡Ò»Ìõ¼ÇÂ¼
-    public function getFormSource($query,$type="assoc"){
-    if(!in_array($type,array("assoc","array","row")))
-    {
-      die("mysqli_query error");
-    }
-    $funcname="mysqli_fetch_".$type;
-    return $funcname($query);
-    }
+    //è·å–ä¸€æ¡è®°å½•,å‰ç½®æ¡ä»¶é€šè¿‡èµ„æºè·å–ä¸€æ¡è®°å½•
+    // public function getFormSource($query,$type="assoc"){
+    // if(!in_array($type,array("assoc","array","row")))
+    // {
+      // die("mysqli_query error");
+    // }
+    // $funcname="mysqli_fetch_".$type;
+    // return $funcname($query);
+    // }
 	
-    //»ñÈ¡¶àÌõÊı¾İ£¬¶şÎ¬Êı×é
+    //è·å–å¤šæ¡æ•°æ®ï¼ŒäºŒç»´æ•°ç»„
     public function getAll($sql){
      $query=$this->query($sql);
      $list=array();
@@ -142,36 +143,36 @@ class ConnectMysqli{
      return $list;
     }
      /**
-     * ¶¨ÒåÌí¼ÓÊı¾İµÄ·½·¨
-     * @param string $table ±íÃû
-     * @param string orarray $data [Êı¾İ]
-     * @return int ×îĞÂÌí¼ÓµÄid
+     * å®šä¹‰æ·»åŠ æ•°æ®çš„æ–¹æ³•
+     * @param string $table è¡¨å
+     * @param string orarray $data [æ•°æ®]
+     * @return int æœ€æ–°æ·»åŠ çš„id
      */
      public function insert($table,$data){
-     //±éÀúÊı×é£¬µÃµ½Ã¿Ò»¸ö×Ö¶ÎºÍ×Ö¶ÎµÄÖµ
+     //éå†æ•°ç»„ï¼Œå¾—åˆ°æ¯ä¸€ä¸ªå­—æ®µå’Œå­—æ®µçš„å€¼
      $key_str='';
      $v_str='';
      foreach($data as $key=>$v){
       if(empty($v)){
        die("error");
      }
-        //$keyµÄÖµÊÇÃ¿Ò»¸ö×Ö¶ÎsÒ»¸ö×Ö¶ÎËù¶ÔÓ¦µÄÖµ
+        //$keyçš„å€¼æ˜¯æ¯ä¸€ä¸ªå­—æ®µsä¸€ä¸ªå­—æ®µæ‰€å¯¹åº”çš„å€¼
         $key_str.=$key.',';
         $v_str.="'$v',";
      }
      $key_str=trim($key_str,',');
      $v_str=trim($v_str,',');
-     //ÅĞ¶ÏÊı¾İÊÇ·ñÎª¿Õ
+     //åˆ¤æ–­æ•°æ®æ˜¯å¦ä¸ºç©º
      $sql="insert into $table ($key_str) values ($v_str)";
      $this->query($sql);
-    //·µ»ØÉÏÒ»´ÎÔö¼Ó²Ù×ö²úÉúIDÖµ
+    //è¿”å›ä¸Šä¸€æ¬¡å¢åŠ æ“åšäº§ç”ŸIDå€¼
      return $this->getInsertid();
    }
    
    /*
-    * É¾³ıÒ»ÌõÊı¾İ·½·¨
-    * @param1 $table, $where=array('id'=>'1') ±íÃû Ìõ¼ş
-    * @return ÊÜÓ°ÏìµÄĞĞÊı
+    * åˆ é™¤ä¸€æ¡æ•°æ®æ–¹æ³•
+    * @param1 $table, $where=array('id'=>'1') è¡¨å æ¡ä»¶
+    * @return å—å½±å“çš„è¡Œæ•°
     */
     public function deleteOne($table, $where){
       if(is_array($where)){
@@ -183,13 +184,13 @@ class ConnectMysqli{
       }
       $sql = "delete from $table where $condition";
       $this->query($sql);
-      //·µ»ØÊÜÓ°ÏìµÄĞĞÊı
+      //è¿”å›å—å½±å“çš„è¡Œæ•°
       return mysqli_affected_rows($this->link);
     }
     /*
-    * É¾³ı¶àÌõÊı¾İ·½·¨
-    * @param1 $table, $where ±íÃû Ìõ¼ş
-    * @return ÊÜÓ°ÏìµÄĞĞÊı
+    * åˆ é™¤å¤šæ¡æ•°æ®æ–¹æ³•
+    * @param1 $table, $where è¡¨å æ¡ä»¶
+    * @return å—å½±å“çš„è¡Œæ•°
     */
     public function deleteAll($table, $where){
       if(is_array($where)){
@@ -205,27 +206,28 @@ class ConnectMysqli{
       }
       $sql = "delete from $table where $condition";
       $this->query($sql);
-      //·µ»ØÊÜÓ°ÏìµÄĞĞÊı
+      //è¿”å›å—å½±å“çš„è¡Œæ•°
       return mysqli_affected_rows($this->link);
     }
    /**
-    * [ĞŞ¸Ä²Ù×÷description]
-    * @param [type] $table [±íÃû]
-    * @param [type] $data [Êı¾İ]
-    * @param [type] $where [Ìõ¼ş]
+    * [ä¿®æ”¹æ“ä½œdescription]
+    * @param [type] $table [è¡¨å]
+    * @param [type] $data [æ•°æ®]
+    * @param [type] $where [æ¡ä»¶]
     * @return [type]
     */
+	
    public function update($table,$data,$where){
-     //±éÀúÊı×é£¬µÃµ½Ã¿Ò»¸ö×Ö¶ÎºÍ×Ö¶ÎµÄÖµ
+     //éå†æ•°ç»„ï¼Œå¾—åˆ°æ¯ä¸€ä¸ªå­—æ®µå’Œå­—æ®µçš„å€¼
      $str='';
     foreach($data as $key=>$v){
      $str.="$key='$v',";
     }
     $str=rtrim($str,',');
-    //ĞŞ¸ÄSQLÓï¾ä
+    //ä¿®æ”¹SQLè¯­å¥
     $sql="update $table set $str where $where";
     $this->query($sql);
-    //·µ»ØÊÜÓ°ÏìµÄĞĞÊı
+    //è¿”å›å—å½±å“çš„è¡Œæ•°
     return mysqli_affected_rows($this->link);
    }
 }
