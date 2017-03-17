@@ -4,8 +4,14 @@
  * User: cyb
  * Date: 2017/3/15
  * Time: 14:20
- * version:1.0
+ * version:1.0 (已完成)
  * 描述：mysqli过程化风格
+ *  1.通过静态方法实例化类
+ *  2.实现了单条语句和多条语句查询
+ *  3.插入数据、修改数据
+ *  4.删除一条河多条数据
+ *  5.打印数据
+ *  6.查看mysql服务器端和客户端的信息
  */
 
 header('content-type:text/html;charset=utf-8');
@@ -164,7 +170,7 @@ class CybMysqli{
     }
 
 //获取返回最后一次插入的id号
-    public  function lastInsertId(){
+    private function lastInsertId(){
         return mysqli_insert_id($this->link);
     }
 
