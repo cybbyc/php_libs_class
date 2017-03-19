@@ -23,7 +23,7 @@ if(!empty($_FILES) && $_FILES["file"]["error"] == 0){
     $upload = new CybUpload("file");
 
 //    处理上传文件
-    $upload->uploadFile("D:/wwwroot/php_libs_class/upload/");
+    $upload->uploadFile("H:\object\wwwroot\php_libs_class\upload/");
 
 //    打印上传文件信息
     $upload->getFileMsg();
