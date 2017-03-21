@@ -17,7 +17,7 @@
 
 class CybThumb{
 
-//    属性
+//   属性
     private $originDir;         //原图片路径
     private $originName;        //原图片名称
     private $originWidth;       //原图宽度
@@ -63,8 +63,12 @@ class CybThumb{
         $this->getThumbDir();
     }
 //    得到缩略图保存路径
-    private function getThumbDir($rootDir=null,$type = false){
-        $thumbDir = __DIR__.DIRECTORY_SEPARATOR."imgages_thumb".DIRECTORY_SEPARATOR;
+    private function getThumbDir(){
+        $thumbDir = __DIR__.DIRECTORY_SEPARATOR."images_thumb".DIRECTORY_SEPARATOR;
+//        判断路径是否存在
+        if(!$this->dirIsExist($thumbDir)){
+            $this->mkNewDir($thumbDir);
+        }
         $this->thumbDir = $thumbDir.'thumb_'.$this->originName;
     }
 
@@ -102,6 +106,29 @@ class CybThumb{
         $this->thumbWidth = $this->originWidth * $percent;
         $this->thumbHeight = $this->originHeight * $percent;
 
+        $this->createThumbImage();
+    }
+
+//    制作缩略图并保存 -----按给定的宽高压缩
+    public function createThumbSize($width,$height){
+        $this->thumbWidth = $width;
+        $this->thumbHeight = $height;
+
+//        为使图像不失真，判断根据宽还是高进行压缩
+        $percent =$this->originWidth/$this->originHeight;
+        if($this->thumbWidth/$this->thumbHeight >  $percent){
+            $this->thumbWidth = $this->thumbHeight * $percent;
+        }else{
+            $this->thumbHeight = $this->thumbWidth * $percent;
+        }
+
+        $this->createThumbImage();
+
+    }
+
+//    生成缩略图函数
+    private function createThumbImage(){
+
         $newImage = $this->createimage();
 //        根据图片类型把原图片上传到服务器缓存--创建一个缓存图片
         $funcName = "imagecreatefrom".$this->originType;
@@ -115,19 +142,11 @@ class CybThumb{
         $funcName1($newImage,$this->thumbDir);
     }
 
-//    制作缩略图并保存 -----按给定的宽高压缩
-    public function createThumbSize($width,$height){
-
-    }
-
-
-
 
 //    根据缩略图宽高创建一个真彩色图像
     private function createimage(){
        return imagecreatetruecolor($this->thumbWidth,$this->thumbHeight);
     }
-
 
 //    获得以年月日命名的文件夹树
     private function getDateDir($thumbDir){

@@ -86,6 +86,7 @@ class Thumb{
         return array('w'=>$width,'h'=>$height);
     }
 
+
     /**
      * 保存成文件
      * @return [type] [description]
@@ -94,6 +95,8 @@ class Thumb{
         $method = "image".$this->getType();
         $method($image,$this->thumbPath);
     }
+
+
 
     /**
      * 进行绘画操作
